@@ -1,0 +1,16 @@
+{% load admin_list %}
+{% load i18n %}
+<div class="pagination"><ul>
+{% if pagination_required %}
+  <li class="prev{% if cl.page_num == 0 %} disabled"><a href="#">{% else %}"><a href="{{ cl.get_query_string }}&p={{ cl.page_num|add:'-1' }}">{% endif %}&larr; {% trans 'Previous' %}</a></li>
+{% for i in page_range %}
+  <li {% if cl.page_num == i %}class="active"{% endif %}>
+    <a href="{{ cl.get_query_string }}&p={{ i }}">{{ i|add:"1" }}</a>
+  </li>
+{% endfor %}
+    <li><a href="{{ cl.get_query_string }}&p={{ cl.page_num|add:"1"}}">Next &rarr;</a></li>
+{% endif %}
+{{ cl.result_count }} {% ifequal cl.result_count 1 %}{{ cl.opts.verbose_name }}{% else %}{{ cl.opts.verbose_name_plural }}{% endifequal %}
+{% if show_all_url %}<li><a href="{{ show_all_url }}" class="showall">{% trans 'Show all' %}</a></li>{% endif %}
+{% if cl.formset and cl.result_count %}<input type="submit" name="_save" class="default" value="{% trans 'Save' %}"/>{% endif %}
+</ul></div>

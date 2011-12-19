@@ -1,0 +1,19 @@
+Django admin templates customized to use twitter bootstrap
+
+Can be customized like defaults admin templates
+
+AUTHOR
+Guilherme Kuhn <g.kuhn0@gmail.com>
+
+INSTALLATION
+1. Make a simbolic link (or copy template folder) in your project root.
+cd PROJECT_ROOT
+ln -s FOLDER_WHERE_IS_README/admin_bootstrap admin_bootstrap
+
+2. Put in your settings.py:
+TEMPLATE_DIRS = (
+    'FULL_PATH_TO_PROJECT/admin_bootstrap',
+    # other template paths
+)
+
+

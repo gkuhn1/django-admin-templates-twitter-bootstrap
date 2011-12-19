@@ -1,0 +1,159 @@
+{% load url from future %}
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+<style>
+.sidebar {
+  overflow: hidden;
+}
+
+.sidebar td {
+  border: none;
+}
+
+.sidebar h6 {
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.object-tools {
+    margin-bottom: 10px;
+}
+
+form .clearfix {
+    border-top: 1px solid #DDDDDD;
+    padding-top: 8px;
+    margin-bottom: 8px;
+}
+
+form table .clearfix {
+    border-top: 0px solid #DDDDDD;
+}
+
+.help-block {
+    color: #BFBFBF;
+}
+
+#changelist table#result_list tbody td:first-child {
+    border-left: 0 none;
+    border-right: 0 none;
+}
+
+</style>
+{% block extrastyle %}{% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-dropdown.js"></script>
+<script src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-alerts.js"></script>
+<script>
+    $(function() {
+        $(".alert-message").each(function() { // add close function to all alerts
+            var self = $(this)
+            self.addClass('fade').addClass('in');
+            self.alert();
+        });
+    });
+</script>
+{% block extrahead %}{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+</head>
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}" {% if not is_popup %}style="padding-top: 50px;"{% endif %}>
+
+    {% if not is_popup %}
+    <!-- Header -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="container">
+      <span class="brand">{% block branding %}{% endblock %}</span>
+        <!-- DropDown -->
+        <script>
+          $(function() {
+            $('.topbar').dropdown();
+          });
+        </script>
+        <ul class="nav secondary-nav">
+          {% if user.is_active and user.is_staff %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">{% trans "Welcome" %} 
+                <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
+              </a>
+              <ul class="dropdown-menu">
+              {% block userlinks %}
+                  {% url 'django-admindocs-docroot' as docsroot %}
+                  {% if docsroot %}
+                      <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
+                  {% endif %}
+                  {% url 'admin:password_change' as password_change_url %}
+                  {% if password_change_url %}
+                      <li><a href="{{ password_change_url }}">
+                  {% else %}
+                      <li><a href="{{ root_path }}password_change/">
+                  {% endif %}
+                  {% trans 'Change password' %}</a></li>
+                  <li class="divider"></li>
+                  {% url 'admin:logout' as logout_url %}
+                  {% if logout_url %}
+                      <li><a href="{{ logout_url }}">
+                  {% else %}
+                      <li><a href="{{ root_path }}logout/">
+                  {% endif %}
+                  {% trans 'Log out' %}</a></li>
+              {% endblock %}
+              </ul>
+            </li>
+          {% else %}
+            <li><a href="{% url 'registration_register' %}">{% trans 'Register' %}</a></li>
+          {% endif %}
+        </ul>
+    </div>
+  </div>
+</div>
+    <!-- END Header -->
+
+    {% block breadcrumbs %}
+      <ul class="breadcrumb">
+        <li><a href="#">{% trans 'Home' %}</a> <span class="divider">/</span></li>
+        {% if title %}  
+          <li class="active">{{ title }}</li>
+        {% endif %}
+      </ul>
+    {% endblock %}
+{% endif %}
+
+<!-- Container -->
+<div class="container-fluid" style="{% if is_popup %}min-width: 740px;{% endif %}">
+    
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert-message {{ message.tags }}">
+        <a class="close" href="#">×</a>
+        <p>{{ message }}</p>
+      </div>
+      {% endfor %}
+    {% endif %}
+
+    {% block internal_content %}
+    {% block sidebar %}{% endblock %}
+
+    <!-- Content -->
+    <div id="content" class="{% block coltype %}colM{% endblock %}">
+        {% block pretitle %}{% endblock %}
+        {% block content_title %}{% if title %}<h2>{{ title }}</h2>{% endif %}{% endblock %}
+        {% block content %}
+        {% block object-tools %}{% endblock %}
+        {{ content }}
+        {% endblock %}
+        <br class="clear" />
+    </div>
+    {% endblock %}
+    <!-- END Content -->
+
+    {% block footer %}<div id="footer"></div>{% endblock %}
+</div>
+<!-- END Container -->
+
+</body>
+</html>
