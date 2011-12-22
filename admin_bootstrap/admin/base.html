@@ -75,13 +75,13 @@ form table .clearfix {
           });
         </script>
         <ul class="nav secondary-nav">
+          {% block userlinks %}
           {% if user.is_active and user.is_staff %}
             <li class="dropdown">
               <a href="#" class="dropdown-toggle">{% trans "Welcome" %} 
                 <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
               </a>
               <ul class="dropdown-menu">
-              {% block userlinks %}
                   {% url 'django-admindocs-docroot' as docsroot %}
                   {% if docsroot %}
                       <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
@@ -101,12 +101,10 @@ form table .clearfix {
                       <li><a href="{{ root_path }}logout/">
                   {% endif %}
                   {% trans 'Log out' %}</a></li>
-              {% endblock %}
               </ul>
             </li>
-          {% else %}
-            <li><a href="{% url 'registration_register' %}">{% trans 'Register' %}</a></li>
           {% endif %}
+          {% endblock %}
         </ul>
     </div>
   </div>
