@@ -47,21 +47,21 @@
   {% endblock %}
 {% endif %}
 
+{% block object-tools %}
+    <div class="object-tools">
+    {% if has_add_permission %}
+        {% block object-tools-items %}
+            <a href="add/{% if is_popup %}?_popup=1{% endif %}" class="btn btn-small btn-success">
+              <span class="addlink"></span>
+              {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+            </a>
+        {% endblock %}
+    {% endif %}
+    </div>
+{% endblock %}
+
 {% block content %}
   <div id="content-main">
-    {% block object-tools %}
-      <div class="object-tools">
-      {% if has_add_permission %}
-          {% block object-tools-items %}
-              <a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
-                <span class="label success">
-                  {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
-                </span>
-              </a>
-          {% endblock %}
-      {% endif %}
-      </div>
-    {% endblock %}
     {% if cl.formset.errors %}
         <p class="errornote">
         {% blocktrans count cl.formset.errors|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
@@ -81,7 +81,7 @@
         {% endif %}
       {% endblock %}
 
-      <form id="changelist-form" action="" method="post"{% if cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+      <form id="changelist-form" class="form-inline" action="" method="post"{% if cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
       {% if cl.formset %}
         <div>{{ cl.formset.management_form }}</div>
       {% endif %}

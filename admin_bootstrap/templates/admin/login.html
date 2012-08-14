@@ -13,16 +13,16 @@
 
 {% block content %}
 {% if form.errors and not form.non_field_errors and not form.this_is_the_login_form.errors %}
-<div class="alert-message error">
-    <a class="close" href="#">×</a>
-<p>{% blocktrans count form.errors.items|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}</p>
+<div class="alert alert-error alert-block">
+    <a class="close" data-dismiss="alert" href="#">×</a>
+    <p>{% blocktrans count form.errors.items|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}</p>
 </div>
 {% endif %}
 
 {% if form.non_field_errors or form.this_is_the_login_form.errors %}
 {% for error in form.non_field_errors|add:form.this_is_the_login_form.errors %}
-<div class="alert-message error">
-    <a class="close" href="#">×</a>
+<div class="alert alert-error alert-block">
+    <a class="close" data-dismiss="alert" href="#">×</a>
     <p>{{ error }}</p>
 </div>
 {% endfor %}
@@ -31,18 +31,18 @@
 <div id="content-main">
 <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
   
-  <div class="clearfix {% if form.username.errors %}error{% endif %}">
-    <label for="id_username" class="required">{% trans 'Username:' %}</label>
-    <div class="input">
+  <div class="control-group {% if form.username.errors %}error{% endif %}">
+    <label class="control-label" for="id_username" class="required">{% trans 'Username:' %}</label>
+    <div class="controls">
       {{ form.username }}
       {% for err in form.username.errors %}
         <span class="help-inline">{{err}}</span>
       {% endfor %}
     </div>
   </div>
-  <div class="clearfix {% if form.password.errors %}error{% endif %}">
-    <label for="id_password" class="required">{% trans 'Password:' %}</label>
-    <div class="input">
+  <div class="control-group {% if form.password.errors %}error{% endif %}">
+    <label class="control-label" for="id_password" class="required">{% trans 'Password:' %}</label>
+    <div class="controls">
         {{ form.password }}
       {% for err in form.password.errors %}
         <span class="help-inline">{{err}}</span>
@@ -51,7 +51,7 @@
     <input type="hidden" name="this_is_the_login_form" value="1" />
     <input type="hidden" name="next" value="{{ next }}" />
   </div>
-  <div class="input">
+  <div class="form-actions">
     <input type="submit" class="btn" value="{% trans 'Log in' %}" />
   </div>
 </form>

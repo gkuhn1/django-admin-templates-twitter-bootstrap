@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="submit-row" {% if is_popup %}style="overflow: auto;"{% endif %}>
-{% if show_save %}<input type="submit" value="{% trans 'Save' %}" class="btn primary default" name="_save" {{ onclick_attrib }}/>{% endif %}
-{% if show_delete_link %}<p class="deletelink-box"><a href="delete/" class="btn danger">{% trans "Delete" %}</a></p>{% endif %}
+{% if show_save %}<input type="submit" value="{% trans 'Save' %}" class="btn btn-primary" name="_save" {{ onclick_attrib }}/>{% endif %}
+{% if show_delete_link %}<p class="deletelink-box"><a href="delete/" class="btn btn-danger">{% trans "Delete" %}</a></p>{% endif %}
 {% if show_save_as_new %}<input type="submit" value="{% trans 'Save as new' %}" class="btn" name="_saveasnew" {{ onclick_attrib }}/>{%endif%}
 {% if show_save_and_add_another %}<input type="submit" value="{% trans 'Save and add another' %}" class="btn" name="_addanother" {{ onclick_attrib }} />{% endif %}
 {% if show_save_and_continue %}<input type="submit" value="{% trans 'Save and continue editing' %}" class="btn" name="_continue" {{ onclick_attrib }}/>{% endif %}

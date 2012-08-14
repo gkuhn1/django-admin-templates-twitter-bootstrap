@@ -4,82 +4,99 @@
 <html>
 <head>
 <title>{% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+<link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+{% block extrastyle %}{% endblock %}
 <style>
-.sidebar {
-  overflow: hidden;
+#changelist table tbody td:first-child, #changelist table tbody th:first-child {
+    border-left: 1px solid #ddd;
 }
-
-.sidebar td {
-  border: none;
-}
-
-.sidebar h6 {
-  font-size: 10px;
-  line-height: 12px;
+#changelist .actions {
+  margin-top: 10px;
+  border: 1px solid #DDD;
 }
 
 .object-tools {
-    margin-bottom: 10px;
+  float: right;
 }
 
-form .clearfix {
-    border-top: 1px solid #DDDDDD;
-    padding-top: 8px;
-    margin-bottom: 8px;
+select + .btn {
+  margin-top: -10px;
+  margin-left: 5px;
 }
 
-form table .clearfix {
-    border-top: 0px solid #DDDDDD;
+.calendarbox {
+  border: 1px solid #ccc;
 }
 
-.help-block {
-    color: #BFBFBF;
+.row-fluid {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
 }
 
-#changelist table#result_list tbody td:first-child {
-    border-left: 0 none;
-    border-right: 0 none;
+.page-header {
+  padding-bottom: 4px;
 }
 
+body.popup .row-fluid {
+  max-width: 700px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+body.popup .vLargeTextField, body.popup .vXMLLargeTextField {
+  max-width: 400px;
+}
+
+.addlink {
+  background: url(/static/admin/img/icon_addlink.gif) 0 .2em no-repeat;
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.changelink {
+  background: url(/static/admin/img/icon_changelink.gif) 0 .2em no-repeat;
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.deletelink {
+  background: url(/static/admin/img/icon_deletelink.gif) 0 .25em no-repeat;
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
 </style>
-{% block extrastyle %}{% endblock %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-dropdown.js"></script>
-<script src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-alerts.js"></script>
 <script>
-    $(function() {
-        $(".alert-message").each(function() { // add close function to all alerts
-            var self = $(this)
-            self.addClass('fade').addClass('in');
-            self.alert();
-        });
-    });
+window.__admin_media_prefix__ = '/static/admin/';
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
 {% block extrahead %}{% endblock %}
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
 </head>
 
-<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}" {% if not is_popup %}style="padding-top: 50px;"{% endif %}>
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}">
 
     {% if not is_popup %}
     <!-- Header -->
-<div class="topbar">
-  <div class="topbar-inner">
-    <div class="container">
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container-fluid">
       <span class="brand">{% block branding %}{% endblock %}</span>
-        <!-- DropDown -->
-        <script>
-          $(function() {
-            $('.topbar').dropdown();
-          });
-        </script>
-        <ul class="nav secondary-nav">
+        <ul class="nav pull-right">
           {% block userlinks %}
           {% if user.is_active and user.is_staff %}
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle">{% trans "Welcome" %} 
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Welcome" %} 
                 <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
+                <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
                   {% url 'django-admindocs-docroot' as docsroot %}
@@ -111,6 +128,7 @@ form table .clearfix {
 </div>
     <!-- END Header -->
 
+ <div class="container-fluid">
     {% block breadcrumbs %}
       <ul class="breadcrumb">
         <li><a href="#">{% trans 'Home' %}</a> <span class="divider">/</span></li>
@@ -119,32 +137,39 @@ form table .clearfix {
         {% endif %}
       </ul>
     {% endblock %}
+</div>
+
 {% endif %}
 
 <!-- Container -->
-<div class="container-fluid" style="{% if is_popup %}min-width: 740px;{% endif %}">
+<div class="container-fluid">
     
     {% if messages %}
       {% for message in messages %}
-      <div class="alert-message {{ message.tags }}">
-        <a class="close" href="#">×</a>
+      <div class="alert alert-block {{ message.tags }}">
+        <a class="close" data-dismiss="alert" href="#">×</a>
         <p>{{ message }}</p>
       </div>
       {% endfor %}
     {% endif %}
 
     {% block internal_content %}
-    {% block sidebar %}{% endblock %}
+      <div class="row-fluid">
 
-    <!-- Content -->
-    <div id="content" class="{% block coltype %}colM{% endblock %}">
-        {% block pretitle %}{% endblock %}
-        {% block content_title %}{% if title %}<h2>{{ title }}</h2>{% endif %}{% endblock %}
-        {% block content %}
-        {% block object-tools %}{% endblock %}
-        {{ content }}
-        {% endblock %}
-        <br class="clear" />
+        <div class="span12">
+          <div id="content" class="{% block coltype %}colM{% endblock %}">
+              {% block pretitle %}{% endblock %}
+              <div style="margin-bottom: 10px;">
+              {% block object-tools %}{% endblock %}
+              {% block content_title %}{% if title %}<h2 class="page-header">{{ title }}</h2>{% endif %}{% endblock %}
+              </div>
+
+              {% block content %}
+              {{ content }}
+              {% endblock %}
+              <br class="clear" />
+          </div>
+        </div>
     </div>
     {% endblock %}
     <!-- END Content -->

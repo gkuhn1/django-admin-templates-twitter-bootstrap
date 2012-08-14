@@ -11,102 +11,111 @@
 
 
 {% block internal_content %}
-<div class="sidebar">
-  <table class="zebra-striped">
-    <thead>
-      <tr class="label"><th>{% trans 'My Actions' %}<th></tr>
-    </thead>
-    <tbody>
-            {% load log %}
-            {% get_admin_log 10 as admin_log for_user user %}
-            {% if not admin_log %}
-            <tr><td>{% trans 'None available' %}</td></tr>
-            {% else %}
-            {% for entry in admin_log %}
-            
-            <tr><td>
-                {% if entry.is_addition %}
-                  <span class="label success">
-                {% endif %}
-                {% if entry.is_change %}
-                  <span class="label warning">
-                {% endif %}
-                {% if entry.is_deletion %}
-                  <span class="label important">
+<div class="row-fluid">
+
+
+
+    <div class="content span9">
+    {% if app_list %}
+        {% for app in app_list %}
+            <div class="module">
+            <table summary="{% blocktrans with app.name as name %}Models available in the {{ name }} application.{% endblocktrans %}" class="table table-bordered">
+            <thead>
+              <tr><th colspan="3" style="background: #ccc;">
+                <a href="{{ app.app_url }}" class="section">
+                  {% blocktrans with app.name as name %}{{ name }}{% endblocktrans %}
+                </a>
+              </th></tr>
+            </thead>
+            <tbody>
+            {% for model in app.models %}
+                <tr>
+                {% if model.perms.change %}
+                    <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+                {% else %}
+                    <th scope="row">{{ model.name }}</th>
                 {% endif %}
 
-                {% if entry.is_deletion or not entry.get_admin_url %}
-                    {{ entry.object_repr }}
+                {% if model.perms.add %}
+                    <td style="width: 100px; text-align:center;">
+                      <a href="{{ model.admin_url }}add/" class="btn btn-mini">
+                        <span class="addlink"></span>
+                        <span class="">{% trans 'Add' %}</span>
+                      </a>
+                    </td>
                 {% else %}
-                    <a href="{% if app_list|length_is:1 %}../{%endif%}{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                    <td class="span2" style="width: 100px;">&nbsp;</td>
                 {% endif %}
-                </span>
-                <br/>
-                {% if entry.content_type %}
-                    <h6>{% filter capfirst %}{% trans entry.content_type.name %}{% endfilter %}</h6>
+
+                {% if model.perms.change %}
+                    <td style="width: 100px; text-align:center;">
+                      <a href="{{ model.admin_url }}" class="btn btn-mini">
+                        <span class="changelink"></span>
+                        <span class="">{% trans 'Change' %}</span>
+                      </a>
+                    </td>
                 {% else %}
-                    <h6>{% trans 'Unknown content' %}</h6>
+                    <td style="width: 100px;">&nbsp;</td>
                 {% endif %}
-            </td></tr>
+                </tr>
             {% endfor %}
-            {% endif %}
-      </tbody>
-    </table>
-</div>
-    <div class="content">
-<div class="span11">
-{% if app_list %}
-    {% for app in app_list %}
-        <div class="module">
-        <table summary="{% blocktrans with app.name as name %}Models available in the {{ name }} application.{% endblocktrans %}" class="bordered-table">
+            </tbody>
+            </table>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-warning">
+          <p>{% trans "You don't have permission to edit anything." %}</p>
+        </div>
+    {% endif %}
+    </div>
+
+
+    <div class="sidebar span3">
+      <table class="table table-striped">
         <thead>
-          <tr><th colspan="3" class="label">
-            <a href="{{ app.app_url }}" class="section">
-              {% blocktrans with app.name as name %}{{ name }}{% endblocktrans %}
-            </a>
-          </th></tr>
+          <tr style="background: #ccc;"><th>{% trans 'My Actions' %}<th></tr>
         </thead>
         <tbody>
-        {% for model in app.models %}
-            <tr>
-            {% if model.perms.change %}
-                <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
-            {% else %}
-                <th scope="row">{{ model.name }}</th>
-            {% endif %}
+                {% load log %}
+                {% get_admin_log 10 as admin_log for_user user %}
+                {% if not admin_log %}
+                <tr><td>{% trans 'None available' %}</td></tr>
+                {% else %}
+                {% for entry in admin_log %}
+                
+                <tr><td>
+                    {% if entry.is_addition %}
+                      <span class="label label-success">
+                    {% endif %}
+                    {% if entry.is_change %}
+                      <span class="label label-warning">
+                    {% endif %}
+                    {% if entry.is_deletion %}
+                      <span class="label label-important">
+                    {% endif %}
 
-            {% if model.perms.add %}
-                <td class="span2">
-                  <a href="{{ model.admin_url }}add/" class="addlink">
-                    <span class="label success">{% trans 'Add' %}</span>
-                  </a>
-                </td>
-            {% else %}
-                <td class="span2">&nbsp;</td>
-            {% endif %}
-
-            {% if model.perms.change %}
-                <td class="span2">
-                  <a href="{{ model.admin_url }}" class="changelink">
-                    <span class="label warning">{% trans 'Change' %}</span>
-                  </a>
-                </td>
-            {% else %}
-                <td class="span2">&nbsp;</td>
-            {% endif %}
-            </tr>
-        {% endfor %}
-        </tbody>
+                    {% if entry.is_deletion or not entry.get_admin_url %}
+                        {{ entry.object_repr }}
+                    {% else %}
+                        <a href="{% if app_list|length_is:1 %}../{%endif%}{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                    {% endif %}
+                    </span>
+                    <br/>
+                    {% if entry.content_type %}
+                        <h6>{% filter capfirst %}{% trans entry.content_type.name %}{% endfilter %}</h6>
+                    {% else %}
+                        <h6>{% trans 'Unknown content' %}</h6>
+                    {% endif %}
+                </td></tr>
+                {% endfor %}
+                {% endif %}
+          </tbody>
         </table>
-        </div>
-    {% endfor %}
-{% else %}
-    <div class="alert-message warning">
-      <p>{% trans "You don't have permission to edit anything." %}</p>
     </div>
-{% endif %}
+
+
 </div>
 
-    </div>
 {% endblock %}
 
