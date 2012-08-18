@@ -8,8 +8,10 @@
         {% for field in line %}
             {% if not field.is_checkbox %}
             <label class="control-label" for="{{ field.field.id_for_label }}">
+                {% if field.field.field.required %}<b> {% endif %}
+
                 {{ field.field.label }}
-                {% if field.field.field.required %}* {% endif %}
+                {% if field.field.field.required %}</b> {% endif %}
             </label>
             {% endif %}
             <div class="controls">
@@ -26,7 +28,7 @@
                         <span class="help-inline">{{ err }}</span>
                     {% endfor %}
                     {% if field.field.help_text %}
-                        <span class="help-block">{{ field.field.help_text|safe }}</span>
+                        <span class="alert alert-info help-block"><b>Ayuda: </b>{{ field.field.help_text|safe }}</span>
                     {% endif %}
             </div>
         {% endfor %}

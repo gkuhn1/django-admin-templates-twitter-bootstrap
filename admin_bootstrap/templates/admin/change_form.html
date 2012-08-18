@@ -7,7 +7,7 @@
 {{ media }}
 <style>
   h2,h3{font-size: 14px;}
-  .module{border: 1px solid #ccc;padding: 10px;}
+  .module{border: 1px solid #eee;padding: 10px;}
 </style>
 {% endblock %}
 
@@ -27,13 +27,18 @@
         <li class="active">{% if add %}{% trans "Add" %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}</li>
       </ul>
   {% endblock %}
+
 {% endif %}
 
-{% block content %}<div id="content-main">
-{% if change %}{% if not is_popup %}
-  <div class="object-tools">
+{% block content %}
+<div class='span1'></div>
+<div class='span10'>
+    <div class="object-tools">
     <a href="history/" class="btn btn-small historylink">{% trans "History" %}</span></a>
         </div>
+<div style='clear: both;'></div>
+<div id="content-main">
+{% if change %}{% if not is_popup %}
 {% endif %}{% endif %}
 <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form">{% csrf_token %}{% block form_top %}{% endblock %}
 <div>
@@ -77,4 +82,7 @@
 
 </div>
 </form></div>
+</div><!--span10-->
+<div class='span1'></div>
+
 {% endblock %}
