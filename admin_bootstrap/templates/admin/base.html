@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
 {% block extrastyle %}{% endblock %}
 <style>
+body{background-color:#000;}
+.xxxcontain{background-color:#fff;margin-left:30px;margin-right:30px;margin-top:0px;padding:10px;}
+
 #changelist table tbody td:first-child, #changelist table tbody th:first-child {
     border-left: 1px solid #ddd;
 }
@@ -127,7 +130,7 @@ window.__admin_media_prefix__ = '/static/admin/';
   </div>
 </div>
     <!-- END Header -->
-
+<div class='container-fluid xxxcontain'>
  <div class="container-fluid">
     {% block breadcrumbs %}
       <ul class="breadcrumb">
@@ -177,6 +180,6 @@ window.__admin_media_prefix__ = '/static/admin/';
     {% block footer %}<div id="footer"></div>{% endblock %}
 </div>
 <!-- END Container -->
-
+</div>
 </body>
 </html>
