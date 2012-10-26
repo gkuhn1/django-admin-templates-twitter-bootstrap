@@ -72,16 +72,8 @@
       {% block search %}{% search_form cl %}{% endblock %}
       {% block date_hierarchy %}{% date_hierarchy cl %}{% endblock %}
 
-      {% block filters %}
-        {% if cl.has_filters %}
-          <div id="changelist-filter">
-            <h6>{% trans 'Filter' %}</h6>
-            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
-          </div>
-        {% endif %}
-      {% endblock %}
-
-      <form id="changelist-form" class="form-inline" action="" method="post"{% if cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+    <div class='row-fluid'>
+      <form id="changelist-form" class="form-inline span10" action="" method="post"{% if cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
       {% if cl.formset %}
         <div>{{ cl.formset.management_form }}</div>
       {% endif %}
@@ -93,6 +85,16 @@
       {% endblock %}
       {% block pagination %}{% pagination cl %}{% endblock %}
       </form>
+  {% block filters %}
+        {% if cl.has_filters %}
+          <div id="changelist-filter" class='span2 well'>
+            <h6>{% trans 'Filter' %}</h6>
+            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+          </div>
+        {% endif %}
+      {% endblock %}
+</div> <!--end row fluid-->
+
     </div>
   </div>
 {% endblock %}

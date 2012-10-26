@@ -72,7 +72,7 @@
 
 
     <div class="sidebar span3">
-      <table class="table table-striped well">
+      <table class="table table-striped">
         <thead>
           <tr style="background: #ccc;"><th>{% trans 'My Actions' %}<th></tr>
         </thead>
@@ -86,13 +86,13 @@
                 
                 <tr><td>
                     {% if entry.is_addition %}
-                      <span class=""><i class='icon-ok'></i> 
+                      <span class="label label-success">
                     {% endif %}
                     {% if entry.is_change %}
-                      <span class=""><i class='icon-edit'></i> 
+                      <span class="label label-warning">
                     {% endif %}
                     {% if entry.is_deletion %}
-                      <span class=""><i class='icon-trash'></i> 
+                      <span class="label label-important">
                     {% endif %}
 
                     {% if entry.is_deletion or not entry.get_admin_url %}

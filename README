@@ -1,3 +1,18 @@
+Kase@boredsoft.com  notes:
+
+fork from https://github.com/aobo711/bootstrap-django-admin
+
+
+i fix some blocks, add  some icons and made it more pretty  yey! (~._.)~
+a remake the change_form.html  and change some class for alert-info
+
+i made this fork for django-1.4 bootstrap-admin
+
+enjoy!
+
+
+_____________ README ORIGINAL
+
 Django admin templates customized to use twitter bootstrap
 
 Can be customized like defaults admin templates
@@ -20,5 +35,3 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     ...
 )
-
-
